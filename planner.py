@@ -48,6 +48,10 @@ class Frontier(object):
         self._set.remove(node.state)
         return node
 
+    # Needed for the A* algorithm.
+    def update(self, item, priority):
+        self._queue.update(item, priority)
+
     def __str__(self):
         ''' Return string representation of frontier. '''
         return str(self._queue)
@@ -134,5 +138,8 @@ class ProgressionPlanning(object):
                     explored[successor_state] = successor_node
                     if successor_node not in frontier:
                         frontier.push(successor_node)
+                    else:
+                        # This update method should be in the api.
+                        frontier.update(successor_node, node.g + W * node.h)
 
         return None
