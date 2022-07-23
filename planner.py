@@ -132,6 +132,7 @@ class ProgressionPlanning(object):
                     successor_node = Node(
                         successor_state, action, node, node.g+1, heuristics(successor_state, self))
                     explored[successor_state] = successor_node
-                    frontier.push(successor_node)
+                    if successor_node not in frontier:
+                        frontier.push(successor_node)
 
         return None
