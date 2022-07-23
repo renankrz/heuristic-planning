@@ -1,4 +1,7 @@
-import util
+# RENAN KRZESINSKI
+# BCC
+# 10549964
+
 from state import State
 
 
@@ -12,5 +15,13 @@ def validate(problem, solution):
     It should give you some indication of the correctness of your planner,
     mainly for debugging purposes.
     '''
-    ' YOUR CODE HERE '
-    util.raiseNotDefined()
+    state = State(problem.init)
+    for a in solution:
+        precond = a.precond
+        if state.intersect(precond) != precond:
+            return False
+        state = state.union(a.pos_effect).difference(a.neg_effect)
+    goal = State(problem.goal)
+    if state.intersect(goal) != goal:
+        return False
+    return True
