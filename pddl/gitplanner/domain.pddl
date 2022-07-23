@@ -1,3 +1,7 @@
+;; RENAN KRZESINSKI
+;; BCC
+;; 10549964
+
 (define (domain git)
 
     (:requirements :strips :typing)
@@ -27,63 +31,77 @@
     ;; git add <new-file>
     (:action git-add-new
         :parameters (?f - file)
-        :precondition (and ...)
+        :precondition (and
+            (untracked ?f)
+        )
         :effect (and
-            ...
+            (staged ?f) (not (untracked ?f))
         )
     )
 
     ;; git add <old-file>
     (:action git-add
         :parameters (?f - file)
-        :precondition (and ...)
+        :precondition (and
+            (modified-in-workspace ?f)
+        )
         :effect (and
-            ...
+            (staged ?f) (clean ?f) (not (modified-in-workspace ?f))
         )
     )
     
     ;; git rm <old-file>
     (:action git-rm
         :parameters (?f - file)
-        :precondition (and ...)
+        :precondition (and
+            (deleted-in-workspace ?f)
+        )
         :effect (and
-            ...
+            (staged ?f)
         )
     )
     
     ;; git checkout -- <old-file>
     (:action git-checkout
         :parameters (?f - file)
-        :precondition (and ...)
+        :precondition (and
+            (committed ?f)
+        )
         :effect (and
-            ...
+            (clean ?f) (not (committed ?f))
         )
     )
     
     ;; git reset -- <old-file>
     (:action git-reset
         :parameters (?f - file)
-        :precondition (and ...)
+        :precondition (and
+            (staged ?f)
+        )
         :effect (and
-            ...
+            (modified-in-workspace ?f) (not (staged ?f))
         )
     )
     
     ;; git reset -- <new-file>
     (:action git-reset-new
         :parameters (?f - file)
-        :precondition (and ...)
+        :precondition (and
+            (staged ?f)
+        )
         :effect (and
-            ...
+            (untracked ?f) (not (staged ?f))
         )
     )
 
     ;; git commit <file>
     (:action git-commit
         :parameters (?f - file)
-        :precondition (and ...)
+        :precondition (and
+            (staged ?f)
+        )
         :effect (and
-            ...
+            (committed ?f) (clean ?f) (not (staged ?f))
         )
     )
 )
